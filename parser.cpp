@@ -64,18 +64,17 @@ bool parser::parse(const char* filename /* =fileToOpen */)
 	}
 
 	if(maxTime<5)
-        en.maxTime = maxTime;
+		en.maxTime = 5;
     else
     {
-        en.maxTime = 5;
+		en.maxTime = maxTime;
         std::cout<<"Set time is too short, algorithm runtime is now set to 5 seconds."<<std::endl;
     }
 
 
 	for( std::string line; getline( reader, line ); )
 	{
-		if(line.size() == 0)continue;
-		if(line == "\r")continue;
+		if(line.size() == 0 ||  line == "\r")continue;
 		if(line.at(0) == ';'){
 			line.erase(line.begin());
 			std::istringstream iss(line);

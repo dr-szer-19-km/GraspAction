@@ -174,8 +174,9 @@ void algo1::generateSuperSolution()
 	int newSolution;
 	int BestSolution=0;
 	auto & jobList = en.getTaskList();
-    //unsigned AlgTime = en.maxTime*0.9;
-    unsigned AlgTime = 15;
+    std::cout<<"MMM:"<<en.maxTime<<std::endl;
+    unsigned AlgTime = en.maxTime*0.9;
+    //unsigned AlgTime = 15;
     int Which=0, X=0, Y=0;
     bool flagaOut = false;
 	for (int which=0; which<3; which++)
@@ -193,6 +194,7 @@ void algo1::generateSuperSolution()
         for(int i=0; i<jobList.size()-1 && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); i++)
             for(int j=i+1; j<jobList.size() && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); j++)
             {
+                //std::cout<<"Robie local search."<<i<<","<<j<<std::endl;
                 newSolution = local_search(which,i,j,out,flagaOut);// poszukiwanie dwoch indeksow do zamienienia; local search algo time
                 if(newSolution < BestSolution)
                 {
