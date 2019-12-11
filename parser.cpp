@@ -36,7 +36,7 @@ bool parser::parseOpts(std::string params)
 			std::cout<<"Algorithm run time in seconds: "<<maxTime<<"\n";
 		}else if(optsym == "-o"){
 			fileToWrite = i.substr(2);
-			std::cout<<"Will write to file: "<<fileToOpen<<"\n";
+			std::cout<<"Will write to file: "<<fileToWrite<<"\n";
 		}else if(optsym == "-h" || optsym == "h" || optsym == "/?"){
 			std::cout<<"Available switches:\n";
 			std::cout<<std::setw(20)<<"-h"<<std::setw(50)<<"opens this help\n";
@@ -63,13 +63,13 @@ bool parser::parse(const char* filename /* =fileToOpen */)
 		return false;
 	}
 
-	if(maxTime<5)
-        en.maxTime = maxTime;
-    else
+	if(maxTime<100)
     {
-        en.maxTime = 5;
-        std::cout<<"Set time is too short, algorithm runtime is now set to 5 seconds."<<std::endl;
+        en.maxTime = 100;
+        std::cout<<"Set time is too short, algorithm runtime is now set to 100 seconds."<<std::endl;
     }
+    else
+		en.maxTime = maxTime;
 
 
 	for( std::string line; getline( reader, line ); )

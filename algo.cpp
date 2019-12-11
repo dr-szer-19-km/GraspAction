@@ -32,29 +32,33 @@ int algo1::local_search(int which, int ind1, int ind2, std::ofstream &out, bool 
     return result;
 }
 
-void algo1::greedy(int which) const
+void algo1::greedy(int which)
 {
     /*
     case 0: sortowanie wg: rosnacych timeArrival -> rosnacych numCores
     case 1: sortowanie wg: rosnacych timeArrival -> rosnacych numCores -> rosnacych timeExec
     case 2: sortowanie wg: rosnacych timeArrival -> malejacych numCores -> malejacych timeExec
     */
+
     switch(which)
     {
     case 0:
         std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool {
 			return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival : t1->numCores < t2-> numCores); //bitowe mogą być szybsze
             });
+        break;
     case 1:
         std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool {
             return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival :
                    ((t1->numCores ^ t2-> numCores) ? t1->numCores < t2->numCores : t1->timeExec < t2-> timeExec)) ;
             });
+        break;
     case 2:
         std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool {
             return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival :
                    ((t1->numCores ^ t2-> numCores) ? t1->numCores > t2->numCores : t1->timeExec > t2-> timeExec)) ;
             });
+        break;
     }
 }
 
@@ -84,6 +88,21 @@ int algo1::generateSolution(std::ofstream &out, bool flagaOut)
 
     int newExecTime;
 
+	std::vector<std::unique_ptr<task> >::iterator it;
+    for(it=jobList.begin(); it<=jobList.end(); it++)
+	{
+		auto &i = *it;
+
+
+
+
+	}
+
+
+
+
+
+
     while(jobList.size() != 0)
     {
         auto &i = jobList.front();
@@ -100,16 +119,12 @@ int algo1::generateSolution(std::ofstream &out, bool flagaOut)
 
                 break;
             }
+	}
+
+*/
 
 
-
-        for( const auto &j : coreFreedomTime) //różne możliwe czasy zwolnień procesorów
-        {
-            if(j >= i->timeArrival)timez.insert(j); //nie rozpatrujemy czasu przed przybyciem zadania
-            else timez.insert(i->timeArrival);
-        }
-        */
-    std::cout << " _" << lastJobExecTime << "_ ";
+    std::fill(coreFreedomTime.begin(), coreFreedomTime.end(), 0);
     lastJobExecTime = 0;
     std::vector<std::unique_ptr<task> >::iterator it;
     for(it=jobList.begin(); it!=jobList.end(); it++)
@@ -167,12 +182,13 @@ void algo1::generateSuperSolution()
 	std::cout<<"Sorting for greedy...\n" << std::flush;
     std::ofstream out(this->outp);
 	int newSolution;
-	int BestSolution;
+	int BestSolution=0;
 	auto & jobList = en.getTaskList();
-    //unsigned AlgTime = en.maxTime*0.9;
-    unsigned AlgTime = 15;
-    int Which, X, Y;
+    unsigned AlgTime = en.maxTime*0.9;
+    //unsigned AlgTime = 15;
+    int Which=0, X=0, Y=0;
     bool flagaOut = false;
+    srand (time(NULL));
 	for (int which=0; which<3; which++)
     {
         greedy(which);
@@ -181,26 +197,44 @@ void algo1::generateSuperSolution()
         if (!which || (which && newSolution < BestSolution))
         {
             BestSolution = newSolution;
+            std::cout << "." << newSolution << "<-- greedy (Best)\n"<<std::flush;
             Which = which;
             X = 0;
             Y = 0;
         }
-        for(int i=0; i<jobList.size()-1 && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); i++)
-            for(int j=i+1; j<jobList.size() && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); j++)
+        std::vector<int> vector_i;
+        for(int i=0; i<jobList.size(); i++)
+            vector_i.push_back(i);
+        std::vector<int>::iterator index_it = vector_i.begin();
+
+        for (int i = rand() % (jobList.size()); vector_i.size()-1 && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); i = rand() % (jobList.size()-1))
+        {
+            index_it = std::find(vector_i.begin(), vector_i.end(), i);
+            if(index_it != vector_i.end())
             {
-                newSolution = local_search(which,i,j,out,flagaOut);// poszukiwanie dwoch indeksow do zamienienia; local search algo time
-                if(newSolution < BestSolution)
+                for(int j=0; j<jobList.size() && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); j++)
                 {
-                    std::cout << newSolution << "<-- local search\n" <<std::flush;
-                    BestSolution = newSolution;
-                    Which = which;
-                    X = i;
-                    Y = j;
+                    if (i!=j)
+                    {
+                        newSolution = local_search(which,i,j,out,flagaOut);// poszukiwanie dwoch indeksow do zamienienia; local search algo time
+                        std::cout << " " << newSolution << "<-- local search dla " << i << "," << j <<std::endl;
+                    }
+                    if(newSolution < BestSolution)
+                    {
+                        std::cout << newSolution << "<-- local search (Best)\n" <<std::flush;
+                        BestSolution = newSolution;
+                        Which = which;
+                        X = i;
+                        Y = j;
+                    }
                 }
+                vector_i.erase(index_it);
             }
+        }
     }
     flagaOut = true;
     BestSolution = local_search(Which,X,Y,out,flagaOut); // wpisywanie najlepszego rozwiazania do outputu
     out.close();
+    std::cout<<"\nBestSolution: "<<BestSolution<<std::endl;
 	std::cout<<"Algo done"<<std::endl;
 }

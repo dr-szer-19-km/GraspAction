@@ -12,9 +12,20 @@ class parser{
 	bool verbose{false};
 	unsigned limT{0};
 
-	std::string fileToOpen{"2Sandia-Ross-2001-1.1-cln.swf"};
+    //std::string fileToOpen{"Sandia-Ross-2001-1.1-cln.swf"};
+	//std::string fileToOpen{"2Sandia-Ross-2001-1.1-cln.swf"};
+	//std::string fileToOpen{"CIEMAT-Euler-2008-1.swf"};
+	//std::string fileToOpen{"DAS2-fs0-2003-1.swf"};
+	//std::string fileToOpen{"LANL-CM5-1994-4.1-cln.swf"};
+	//std::string fileToOpen{"SDSC-SP2-1998-4.2-cln.swf"};
 	//std::string fileToOpen{"test.swf"};
+	//std::string fileToOpen{"test1.swf"};
+	//std::string fileToOpen{"test2.swf"};
+	std::string fileToOpen{"test3.swf"};
+
+
 	std::string fileToWrite{"output.txt"};
+
 
 	public:
     unsigned maxTime{0};

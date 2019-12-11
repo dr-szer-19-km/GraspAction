@@ -23,7 +23,7 @@ class algo1 : public algo{
 	std::vector <time_task_t> coreFreedomTime;
 
 	int calcFreeCores(int when) const;
-	void greedy(int which) const;
+	void greedy(int which);
 	int local_search(int which, int ind1, int ind2, std::ofstream &out, bool flagaOut);
 	int lastJobExecTime = 0;
 
