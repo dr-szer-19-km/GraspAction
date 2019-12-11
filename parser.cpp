@@ -65,10 +65,10 @@ bool parser::parse(const char* filename /* =fileToOpen */)
 
 	if(maxTime<5)
 		en.maxTime = 5;
+	    std::cout<<"Set time is too short, algorithm runtime is now set to 5 seconds."<<std::endl;
     else
     {
 		en.maxTime = maxTime;
-        std::cout<<"Set time is too short, algorithm runtime is now set to 5 seconds."<<std::endl;
     }
 
 
