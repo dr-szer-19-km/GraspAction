@@ -45,16 +45,19 @@ void algo1::greedy(int which) const
         std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool {
 			return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival : t1->numCores < t2-> numCores); //bitowe mogą być szybsze
             });
+        break;
     case 1:
         std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool {
             return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival :
                    ((t1->numCores ^ t2-> numCores) ? t1->numCores < t2->numCores : t1->timeExec < t2-> timeExec)) ;
             });
+        break;
     case 2:
         std::sort(jobList.begin(), jobList.end(), [](const std::unique_ptr<task>& t1, const std::unique_ptr<task>& t2) -> bool {
             return ((t1->timeArrival ^ t2->timeArrival) ? t1->timeArrival < t2->timeArrival :
                    ((t1->numCores ^ t2-> numCores) ? t1->numCores > t2->numCores : t1->timeExec > t2-> timeExec)) ;
             });
+        break;
     }
 }
 
@@ -109,6 +112,8 @@ int algo1::generateSolution(std::ofstream &out, bool flagaOut)
             else timez.insert(i->timeArrival);
         }
         */
+    std::fill(coreFreedomTime.begin(), coreFreedomTime.end(), 0);
+
     std::cout << " _" << lastJobExecTime << "_ ";
     lastJobExecTime = 0;
     std::vector<std::unique_ptr<task> >::iterator it;
@@ -167,11 +172,11 @@ void algo1::generateSuperSolution()
 	std::cout<<"Sorting for greedy...\n" << std::flush;
     std::ofstream out(this->outp);
 	int newSolution;
-	int BestSolution;
+	int BestSolution=0;
 	auto & jobList = en.getTaskList();
     //unsigned AlgTime = en.maxTime*0.9;
     unsigned AlgTime = 15;
-    int Which, X, Y;
+    int Which=0, X=0, Y=0;
     bool flagaOut = false;
 	for (int which=0; which<3; which++)
     {
