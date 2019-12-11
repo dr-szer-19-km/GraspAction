@@ -15,7 +15,7 @@ protected:
 
 public:
     algo(env &);
-    virtual int generateSolution(bool flaga) = 0;
+    virtual int generateSolution(std::ofstream &out, bool flagaOut) = 0;
     inline bool getVerbose()const {return verbose;}
 };
 
@@ -24,7 +24,8 @@ class algo1 : public algo{
 
 	int calcFreeCores(int when) const;
 	void greedy(int which) const;
-	int local_search(int which, int rand1, int rand2, bool flaga);
+	int local_search(int which, int ind1, int ind2, std::ofstream &out, bool flagaOut);
+	int lastJobExecTime = 0;
 
 public:
     algo1(env & e, bool v, std::string o) : algo1(e)
@@ -34,7 +35,7 @@ public:
     }
     algo1(env & e);
     std::vector<std::unique_ptr<task> > &jobList = en.getTaskList();
-    int generateSolution(bool flaga) override;
+    int generateSolution(std::ofstream &out, bool flagaOut) override;
     void generateSuperSolution();
 };
 
