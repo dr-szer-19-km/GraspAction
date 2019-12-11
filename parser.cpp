@@ -74,8 +74,7 @@ bool parser::parse(const char* filename /* =fileToOpen */)
 
 	for( std::string line; getline( reader, line ); )
 	{
-		if(line.size() == 0)continue;
-		if(line == "\r")continue;
+		if(line.size() == 0 ||  line == "\r")continue;
 		if(line.at(0) == ';'){
 			line.erase(line.begin());
 			std::istringstream iss(line);

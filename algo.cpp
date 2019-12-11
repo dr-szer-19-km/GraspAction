@@ -124,7 +124,7 @@ int algo1::generateSolution(std::ofstream &out, bool flagaOut)
 */
 
 
-    std::fill(coreFreedomTime.begin(), coreFreedomTime.end(), 0);
+	std::fill(coreFreedomTime.begin(), coreFreedomTime.end(), 0);
     lastJobExecTime = 0;
     std::vector<std::unique_ptr<task> >::iterator it;
     for(it=jobList.begin(); it!=jobList.end(); it++)
@@ -212,7 +212,7 @@ void algo1::generateSuperSolution()
             index_it = std::find(vector_i.begin(), vector_i.end(), i);
             if(index_it != vector_i.end())
             {
-                for(int j=0; j<jobList.size() && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); j++)
+			for(int j=0; j<jobList.size() && (double(clock())/double(CLOCKS_PER_SEC) < double(AlgTime/3*(which+1))); j++)
                 {
                     if (i!=j)
                     {
