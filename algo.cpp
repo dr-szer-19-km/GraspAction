@@ -7,13 +7,6 @@
 #include <iostream>
 #include <ctime>
 
-/*
-struct row
-{
-    int timeExec_set;   // czas zakonczenia pracy wybranych procesorow
-    std::set<int> procSet; // numery procesorow z tym samym czasem zakonczenia pracy
-};
-*/
 
 algo::algo(env& e) : en(e){}
 algo1::algo1(env& e) : algo(e){
@@ -74,56 +67,6 @@ int algo1::calcFreeCores(int when)const
 
 int algo1::generateSolution(std::ofstream &out, bool flagaOut)
 {
-    //std::cout<<"Sorting done.\n Please wait until solving is done.\n"<<std::endl;
-
-    //if(getVerbose())en.listJobsByTimeExec();
-
-    /*
-    std::vector<row> proc_num_array; // wektor roznych czasow zakonczenia pracy procesorow
-    row element;
-    element.timeExec_set=0;
-    for (int j=0; j<e.numCores; j++)
-        element.procSet.insert(j);
-    proc_num_array.push_back(element);  //wstawianie pierwszego zbioru o nazwie 0 zawierajacego wszystkie cory
-
-    int newExecTime;
-
-	std::vector<std::unique_ptr<task> >::iterator it;
-    for(it=jobList.begin(); it<=jobList.end(); it++)
-	{
-		auto &i = *it;
-
-
-
-
-	}
-
-
-
-
-
-
-    while(jobList.size() != 0)
-    {
-        auto &i = jobList.front();
-        for( const auto &j : proc_num_array)
-            if(j->timeExec_set <= i->timeArrival && j->procSet.size() >= i->numCores)   // dodawanie rozwiazania
-            {
-                newExecTime = j->timeExec_set + i->timeExec;
-                element.timeExec_set = newExecTime;
-                for(const auto &k : proc_num_array)
-                    if(k->timeExec_set == newExecTime)
-                    {
-
-                    }
-
-                break;
-            }
-	}
-
-*/
-
-
 	std::fill(coreFreedomTime.begin(), coreFreedomTime.end(), 0);
     lastJobExecTime = 0;
     std::vector<std::unique_ptr<task> >::iterator it;
@@ -217,7 +160,7 @@ void algo1::generateSuperSolution()
                     if (i!=j)
                     {
                         newSolution = local_search(which,i,j,out,flagaOut);// poszukiwanie dwoch indeksow do zamienienia; local search algo time
-                        std::cout << " " << newSolution << "<-- local search dla " << i << "," << j <<std::endl;
+                        if(getVerbose())std::cout << " " << newSolution << "<-- local search dla " << i << "," << j <<std::endl;
                     }
                     if(newSolution < BestSolution)
                     {
